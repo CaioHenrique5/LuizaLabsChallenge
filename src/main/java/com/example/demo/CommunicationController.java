@@ -34,8 +34,10 @@ public class CommunicationController {
         }
     }
     @PostMapping("/")
-    public void add(@RequestBody Communication communication) {
+    public String add(@RequestBody Communication communication) {
     	communicationService.saveCommunication(communication);
+		return "Comunicação salva com sucesso";
+    	
     }
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@RequestBody Communication communication, @PathVariable Integer id) {
@@ -49,8 +51,9 @@ public class CommunicationController {
         }
     }
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Integer id) {
+    public String delete(@PathVariable Integer id) {
 
     	communicationService.deleteCommunication(id);
+		return "Comunicação com o Id :" + id;
     }
 }

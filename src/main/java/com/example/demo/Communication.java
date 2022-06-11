@@ -10,7 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "Communication")
+@Table(name = "COMMUNICATION")
 public class Communication {
 	@Id @GeneratedValue(strategy=GenerationType.AUTO)
 	private int id;
@@ -24,11 +24,13 @@ public class Communication {
 	@Column(nullable = false)
 	private String message;
 	
-	Communication(String type,String destination, Date sendTime, String message){
+	public Communication(String type,String destination, Date sendTime, String message){
 		this.type = type;
 		this.sendTime = sendTime;
 		this.destination = destination;
 		this.message = message;
+	}
+	public Communication() {
 	}
 	public String getType() {
 		return type;

@@ -1,55 +1,56 @@
 package com.example.demo;
 
 import java.util.List;
-import java.util.Optional;
-
-
+import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class CommunicationController {
+    @Autowired
+    CommunicationService communicationService;
 
-	@Autowired
-	private CommunicationRepository CommunicationRepository;
-	
-	@RequestMapping(value = "/communication", method = RequestMethod.GET)
-	public List<Communication> get(){
-		return CommunicationRepository.findAll();
-	}
-	
-	@RequestMapping(value = "/communication/{id}", method = RequestMethod.GET)
-	public ResponseEntity<Communication> GetById(@PathVariable(value = "id") long id){
-		Optional<Communication> communication = CommunicationRepository.findById(id);
-		if(communication.isPresent()) {
-			return new ResponseEntity<Communication>(communication.get(),HttpStatus.OK);
-		}else {
-			return new ResponseEntity<Communication>(HttpStatus.NOT_FOUND);
-		}
-	}
-	@RequestMapping(value = "/communication", method = RequestMethod.POST)
-	public Communication Post( @RequestBody Communication communication) {
-		return CommunicationRepository.save(communication);
-	
-	}
-	
-	@RequestMapping(value = "/Communication/{id}", method = RequestMethod.DELETE)
-	public ResponseEntity<Object> Delete( @PathVariable(value="id") long id){
-		Optional<Communication> communication = CommunicationRepository.findById(id);
-		if(communication.isPresent()) {
-			CommunicationRepository.delete(communication.get());
-			return new ResponseEntity<>(HttpStatus.OK);
-		}else {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
-		
-	}
-	
+    @GetMapping("")
+    public List<Communication> list() {
+        return communicationService.listAllCommunication();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Communication> get(@PathVariable Integer id) {
+        try {
+        	Communication communication = communicationService.getCommunication(id);
+            return new ResponseEntity<Communication>(communication, HttpStatus.OK);
+        } catch (NoSuchElementException e) {
+            return new ResponseEntity<Communication>(HttpStatus.NOT_FOUND);
+        }
+    }
+    @PostMapping("/")
+    public void add(@RequestBody Communication communication) {
+    	communicationService.saveCommunication(communication);
+    }
+    @PutMapping("/{id}")
+    public ResponseEntity<?> update(@RequestBody Communication communication, @PathVariable Integer id) {
+        try {
+        	Communication existCommunication = communicationService.getCommunication(id);
+        	communication.setId(id);            
+            communicationService.saveCommunication(communication);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (NoSuchElementException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable Integer id) {
+
+    	communicationService.deleteCommunication(id);
+    }
 }

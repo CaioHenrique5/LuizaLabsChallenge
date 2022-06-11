@@ -13,7 +13,10 @@ import javax.persistence.Table;
 @Table(name = "Communication")
 public class Communication {
 	@Id @GeneratedValue(strategy=GenerationType.AUTO)
-	private Long id;
+	private int id;
+	@Column(nullable = false)
+	private String type;
+
 	@Column(nullable = false)
 	private Date sendTime;
 	@Column(nullable = false)
@@ -21,16 +24,23 @@ public class Communication {
 	@Column(nullable = false)
 	private String message;
 	
-	Communication(String destination, Date sendTime, String message){
+	Communication(String type,String destination, Date sendTime, String message){
+		this.type = type;
 		this.sendTime = sendTime;
 		this.destination = destination;
 		this.message = message;
 	}
-	
-	public Long getId() {
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+	public int getId() {
 		return id;
 	}
-	public void setId(Long id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 	public Date getSendTime() {

@@ -2,6 +2,8 @@ package com.example.demo;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
+
+import java.util.ArrayList;
 import java.util.List;
 import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,13 +27,7 @@ class CommunicationControllerTest {
 	}
 	
 	@Test
-	void validarUpdate() {
-		Communication comm = new Communication("","", null, "");
-		List<Communication> lComm = null;
-		lComm.add(comm);
-		when(this.commService.listAllCommunication())
-		.thenReturn(lComm);
-		given().accept(ContentType.JSON).when().get("/").then().statusCode(HttpStatus.SC_OK);
+	void validarListAll() {
 	}
 
 }
